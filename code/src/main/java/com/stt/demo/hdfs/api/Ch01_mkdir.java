@@ -13,7 +13,7 @@ import java.net.URISyntaxException;
  * 使用api的方式在hdfs上创建目录
  * Created by Administrator on 2019/4/25.
  */
-public class D01_mkdir {
+public class Ch01_mkdir {
 
 
 	/**
