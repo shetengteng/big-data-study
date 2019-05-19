@@ -1,4 +1,4 @@
-package com.stt.demo.mr.wordCount;
+package com.stt.demo.mr.Ch01_wordCount;
 
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
