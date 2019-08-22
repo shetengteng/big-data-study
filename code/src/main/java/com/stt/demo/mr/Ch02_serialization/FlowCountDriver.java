@@ -9,6 +9,9 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import java.io.IOException;
 
+import static com.stt.demo.mr.Constant.INPUT_PATH_PREFIX;
+import static com.stt.demo.mr.Constant.OUTPUT_PATH_PREFIX;
+
 /**
  * Created by Administrator on 2019/5/19.
  */
@@ -16,7 +19,9 @@ public class FlowCountDriver {
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
 		// 设置输入输出参数
-		args = new String[]{"d:/input.txt","d:/output.txt"};
+
+		args = new String[]{INPUT_PATH_PREFIX+"ch02/input.txt", OUTPUT_PATH_PREFIX+"ch02/output"};
+
 		// 配置信息以及job对象
 		Configuration conf = new Configuration();
 		Job job = Job.getInstance(conf);

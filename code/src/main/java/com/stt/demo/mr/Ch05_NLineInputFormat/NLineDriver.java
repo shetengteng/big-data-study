@@ -16,7 +16,7 @@ public class NLineDriver {
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
 		args = new String[]{"d:/study/big-data/code/data/hadoop/mr/ch05/input.txt",
-				"d:/study/big-data/code/data/hadoop/mr/ch05/output.txt"};
+				"d:/study/big-data/code/data/hadoop/mr/ch05/output"};
 		Configuration config = new Configuration();
 
 		Job job = Job.getInstance(config);

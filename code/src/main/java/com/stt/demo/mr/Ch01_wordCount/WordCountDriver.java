@@ -33,6 +33,9 @@ public class WordCountDriver {
 		// 设置最终输出的类型
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(IntWritable.class);
+
+		job.setNumReduceTasks(1);
+
 		// 设置输入和输出路径
 		FileInputFormat.setInputPaths(job,new Path(args[0]));
 		FileOutputFormat.setOutputPath(job,new Path(args[1]));

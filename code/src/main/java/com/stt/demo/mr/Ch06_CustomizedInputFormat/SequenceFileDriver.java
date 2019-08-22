@@ -9,14 +9,16 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 
+import static com.stt.demo.mr.Constant.INPUT_PATH_PREFIX;
+import static com.stt.demo.mr.Constant.OUTPUT_PATH_PREFIX;
+
 /**
  * Created by Administrator on 2019/6/4.
  */
 public class SequenceFileDriver {
 
 	public static void main(String[] args) throws Exception {
-		args = new String[]{"d:/study/big-data/code/data/hadoop/mr/ch06",
-				"d:/study/big-data/code/data/hadoop/mr/ch06/output"};
+		args = new String[]{INPUT_PATH_PREFIX+"ch06", OUTPUT_PATH_PREFIX+"ch06/output"};
 
 		Configuration conf = new Configuration();
 		Job job = Job.getInstance(conf);
