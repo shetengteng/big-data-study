@@ -1,7 +1,6 @@
-package com.stt.demo.mr.Ch02_serialization;
+package com.stt.demo.mr.Ch02_Serialization;
 
 import lombok.Data;
-import lombok.ToString;
 import org.apache.hadoop.io.Writable;
 
 import java.io.DataInput;

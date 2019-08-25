@@ -1,4 +1,4 @@
-package com.stt.demo.mr.Ch07_partition;
+package com.stt.demo.mr.Ch07_Partition;
 
 import lombok.Data;
 import org.apache.hadoop.io.Writable;

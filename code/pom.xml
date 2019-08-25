@@ -82,7 +82,7 @@
 					<archive>
 						<manifest>
 							<!--这里需要替换为入口类-->
-							<mainClass>com.stt.demo.mr.Ch01_wordCount.WordCountDriver</mainClass>
+							<mainClass>com.stt.demo.mr.Ch01_WordCount.WordCountDriver</mainClass>
 						</manifest>
 					</archive>
 				</configuration>

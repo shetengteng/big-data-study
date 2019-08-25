@@ -10,6 +10,7 @@ public class FlowCountReducer extends Reducer<FlowBean,Text,Text,FlowBean> {
 	@Override
 	protected void reduce(FlowBean key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
 		// 已经排好序了，输出即可
+		// 注意迭代器的源码，这里被hadoop重写了
 		for(Text v : values){
 			context.write(v,key);
 		}

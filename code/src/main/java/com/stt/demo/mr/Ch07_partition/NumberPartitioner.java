@@ -1,4 +1,4 @@
-package com.stt.demo.mr.Ch07_partition;
+package com.stt.demo.mr.Ch07_Partition;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.io.Text;
