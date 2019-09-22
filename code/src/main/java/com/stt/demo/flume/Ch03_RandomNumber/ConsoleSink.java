@@ -4,9 +4,7 @@ import org.apache.flume.*;
 import org.apache.flume.conf.Configurable;
 import org.apache.flume.sink.AbstractSink;
 
-/**
- * Created by Administrator on 2019/9/12.
- */
+
 public class ConsoleSink extends AbstractSink implements Configurable {
 
 	@Override
