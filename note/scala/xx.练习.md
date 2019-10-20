@@ -95,3 +95,164 @@ res14: String = o
 
 ![1571129818313](../img/scala/12.png)
 
+
+
+# 对象
+
+编写一个Conversions对象，加入 inchesToCentimeters,gallonsToLiters 和 milesToKilometers 方法
+
+```scala
+object Conversions {
+    def inchesToCentimeters(value: Double) = value * 2.54
+    def gallonsToLiters(value: Double) = value * 3.78541178
+    def milesToKilometers(value: Double) = value * 1.609344
+}
+```
+
+定义一个 Point 类和一个伴生对象,使得我们可以不用 new 而直接用 Point(3,4)来构造 Point 实例 apply 方法的使用
+
+```scala
+class Point(_x : Double,_y : Double){
+    var x: Double = _x
+    var y: Double = _y
+    override def toString(): String ={
+        "x="+x+" y="+y
+    }
+}
+
+object Point{
+    def apply(x: Double,y : Double) = new Point(x,y)
+}
+```
+
+
+
+编写一个 Scala 应用程序,使用 App 特质,以反序打印命令行参数,用空格隔开。举例来说,scala Reverse Hello World 应该打印 World Hello
+
+ ```scala
+object Exercise03 extends App {
+  val args2 = args.reverse
+  println(args2.mkString(" "))
+}
+ ```
+
+
+
+编写一个扑克牌 4 种花色的枚举,让其 toString 方法分别返回♣♦♥♠，并实现一个函数,检查某张牌的花色是否为红色
+
+```scala
+object test{
+    def main(args: Array[String]): Unit = {
+        println(Suits)
+        println(Suits.isRed(Suits.Diamond))
+    }
+}
+
+object Suits extends Enumeration {
+    type myValue = Value // 给Value起别名 ♣♦♥♠
+
+    val Spade = Value("♣")
+    val Club = Value("♠")
+    val Heart = Value("♥")
+    val Diamond = Value("♦")
+
+    override def toString(): String = {
+        Suits.values.mkString(",")
+    }
+
+    def isRed(suit: myValue) = suit == Heart || suit == Diamond
+}
+```
+
+
+
+
+
+# 继承
+
+扩展如下的BankAccount类，新类CheckingAccount对每次存款和取款都收取1美元的手续费
+
+```scala
+class BankAccount(initialBalance:Double){
+   private var balance = initialBalance
+   def deposit(amount:Double) = { balance += amount; balance}
+   def withdraw(amount:Double) = {balance -= amount; balance}
+}
+```
+
+```scala
+class CheckingAccount(initialBalance: Double) extends BankAccount(initialBalance){
+  override def deposit(amount: Double): Double = {
+    super.deposit(amount-1)
+  }
+  override def withdraw(amount: Double): Double = super.withdraw(amount-1)
+}
+```
+
+
+
+扩展前一个练习的BankAccount类，新类SavingsAccount每个月都有利息产生(earnMonthlyInterest方法被调用)，并且有每月三次免手续费的存款或取款。在earnMonthlyInterest方法中重置交易计数
+
+```scala
+class SavingsAccount(initialBalance:Double) extends BankAccount(initialBalance){
+    private var num:Int = _ // 定义了一个免手续费次数
+
+    def earnMonthlyInterest()={ // 每个月初，我们系统调用该方法，计算利息，将num=3
+        num = 3  //
+        super.deposit(1) 
+    }
+    override def deposit(amount: Double): Double = {//取款时，如num<0收手续费,否则不收
+        num -= 1 //
+        if(num < 0) 
+        super.deposit(amount - 1) 
+        else 
+        super.deposit(amount)
+    }
+    override def withdraw(amount: Double): Double = { //取款逻辑和存款一样
+        num -= 1
+        if (num < 0) super.withdraw(amount + 1) else super.withdraw(amount)
+    }
+}
+```
+
+
+
+设计一个Point类，其x和y坐标可以通过构造器提供。提供一个子类LabeledPoint，其构造器接受一个标签值和x,y坐标,比如:new LabeledPoint(“Black Thursday”,1929,230.07)
+
+ ```scala
+class Point(x:Double,y:Double)
+class LabeledPoint(x:Double,y:Double,tag:String) extends Point(x,y)
+ ```
+
+
+
+定义一个抽象类Shape，一个抽象方法centerPoint，以及该抽象类的子类Rectangle和Circle。为子类提供合适的构造器，并重写centerPoint方法
+
+ ```scala
+abstract class Shape{ //抽象类
+  def centerPoint()  //抽象方法
+}
+class Rectangle(startX:Int,startY:Int,endX:Int,endY:Int) extends Shape{
+  def centerPoint() {} //空
+}
+class Circle(x:Int,y:Int,radius:Double) extends Shape{
+  def centerPoint() {} //空
+}
+ ```
+
+
+
+提供一个Square类，扩展自java.awt.Rectangle并且是三个构造器：一个以给定的端点和宽度构造正方形，一个以(0,0)为端点和给定的宽度构造正方形，一个以(0,0)为端点,0为宽度构造正方形
+
+```scala
+import java.awt.{Point, Rectangle}
+class Square(point:Point,width:Int) extends Rectangle(point.x,point.y,width,width){
+    def this(){
+        this(new Point(0,0),0)
+    }
+    def this(width:Int){
+        this(new Point(0,0),width)
+    }
+}
+```
+
