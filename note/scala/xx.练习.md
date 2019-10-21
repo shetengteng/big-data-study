@@ -256,3 +256,63 @@ class Square(point:Point,width:Int) extends Rectangle(point.x,point.y,width,widt
 }
 ```
 
+
+
+# 特质
+
+- java.awt.Rectangle类有两个很有用的方法translate和grow,但可惜的是像java.awt.geom.Ellipse2D这样的类没有。在Scala中，你可以解决掉这个问题
+  - 定义一个RenctangleLike特质,加入具体的translate和grow方法
+  - 提供任何你需要用来实现的抽象方法,以便你可以像如下代码这样混入该特质
+- val egg = new java.awt.geom.Ellipse2D.Double(5,10,20,30) with RectangleLike
+- egg.translate(10,-10)
+- egg.grow(10,20)
+
+- 分析思路
+  - 考察点是使用特质(自身类型)，编写方法，以动态混入的方式，来扩展一个类的功能
+  - RenctangleLike 名字. translate(将x,y的值重置) 和grow方法(对x,y值进行增长)
+  - new java.awt.geom.Ellipse2D.Double(5,10,20,30) with RectangleLike
+  - 使用 egg.translate(10,-10) egg.grow(10,20)
+
+```scala
+import java.awt.geom.Ellipse2D
+
+object TraitExer extends App{
+
+    //使用我们的特质进行功能扩展
+    val egg = new java.awt.geom.Ellipse2D.Double(5,10,20,30) with RectangleLike
+    println("egg.x=" + egg.getX + " egg.y=" + egg.getY) //
+    egg.translate(10.0,20.5)
+    println("egg.x=" + egg.getX + " egg.y=" + egg.getY) //
+    egg.grow(-1, 10)
+    println("egg.x=" + egg.getX + " egg.y=" + egg.getY) //
+
+}
+trait RectangleLike{ //特质
+    // 使用自身类型
+    this:Ellipse2D.Double=>
+    def translate(x:Double,y:Double){ //方法
+        this.x = x
+        this.y = y
+    }
+    def grow(x:Double,y:Double){
+        this.x += x //增加
+        this.y += y //增加
+    }
+}
+```
+
+- 传统写法，使用继承
+
+```scala
+trait RectangleLike extends Ellipse2D.Double{ 
+    def translate(x:Double,y:Double){ 
+        this.x = x
+        this.y = y
+    }
+    def grow(x:Double,y:Double){
+        this.x += x 
+        this.y += y 
+    }
+}
+```
+
