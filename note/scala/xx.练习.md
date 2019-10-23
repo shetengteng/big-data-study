@@ -316,3 +316,15 @@ trait RectangleLike extends Ellipse2D.Double{
 }
 ```
 
+
+
+# 集合
+
+- val lines = List("atguigu han hello ", "atguigu han aaa aaa aaa ccc ddd uuu")
+
+  使用映射集合，list中，各个单词出现的次数，并按出现次数排序
+
+```scala
+
+```
+
