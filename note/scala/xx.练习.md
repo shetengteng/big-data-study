@@ -325,6 +325,18 @@ trait RectangleLike extends Ellipse2D.Double{
   使用映射集合，list中，各个单词出现的次数，并按出现次数排序
 
 ```scala
-
+def main(args: Array[String]): Unit = {
+    val lines = List("atguigu han hello ", "atguigu han aaa aaa aaa ccc ddd uuu")
+    // 拆分成一个个单词
+    val re1 = lines.flatMap(_.split(" "))
+    // 每个单词一个数字1
+    val re2 = re1.map((_,1))
+    // 分组 产生一个Map
+    val re3 = re2.groupBy(_._1)
+    val re4 = re3.map(x=>(x._1,x._2.size))
+    // 排序
+    val re5 = re4.toList.sortBy(_._2).reverse
+    println(re5)
+}
 ```
 
