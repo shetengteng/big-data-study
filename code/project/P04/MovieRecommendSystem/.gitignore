@@ -1,5 +1,5 @@
 HELP.md
-/businessServer/
+
 /target/
 /classes/
 !.mvn/wrapper/maven-wrapper.jar
