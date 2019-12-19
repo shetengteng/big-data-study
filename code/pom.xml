@@ -5,6 +5,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>scala-demo</module>
+        <module>project/P05/UserBehaviorAnalysis</module>
     </modules>
     <parent>
 		<groupId>org.springframework.boot</groupId>
