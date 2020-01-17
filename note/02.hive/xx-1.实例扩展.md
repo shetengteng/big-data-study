@@ -1,4 +1,4 @@
-## 需求
+# 需求
 
 - 统计硅谷影音视频网站的常规指标，各种TopN指标
   - 统计视频观看数Top10
@@ -12,28 +12,26 @@
 
 
 
-## 项目
+
+
+# 数据结构
 
 
 
-### 数据结构
+## 视频表
 
-
-
-#### 视频表
-
-| 字段        | 备注       | 详细描述                                   |
-| ----------- | ---------- | ------------------------------------------ |
-| video id    | 视频唯一id | 11位字符串                                 |
-| uploader    | 视频上传者 | 上传视频的用户名String                     |
-| age         | 视频年龄   | 视频在平台上的整数天                       |
-| category    | 视频类别   | 上传视频指定的视频分类，数组类型           |
-| length      | 视频长度   | 整形数字标识的视频长度                     |
-| views       | 观看次数   | 视频被浏览的次数                           |
-| rate        | 视频评分   | 满分5分                                    |
-| Ratings     | 流量       | 视频的流量，整型数字                       |
-| conments    | 评论数     | 一个视频的整数评论数                       |
-| related ids | 相关视频id | 相关视频的id，最多20个，类似视频，数组类型 |
+| 字段      | 备注       | 详细描述                                   |
+| --------- | ---------- | ------------------------------------------ |
+| videoId   | 视频唯一id | 11位字符串                                 |
+| uploader  | 视频上传者 | 上传视频的用户名String                     |
+| age       | 视频年龄   | 视频在平台上的整数天                       |
+| category  | 视频类别   | 上传视频指定的视频分类，数组类型           |
+| length    | 视频长度   | 整形数字标识的视频长度                     |
+| views     | 观看次数   | 视频被浏览的次数                           |
+| rate      | 视频评分   | 满分5分                                    |
+| Ratings   | 流量       | 视频的流量，整型数字                       |
+| conments  | 评论数     | 一个视频的整数评论数                       |
+| relatedId | 相关视频id | 相关视频的id，最多20个，类似视频，数组类型 |
 
 数据：data/video
 
@@ -44,7 +42,7 @@ LKh7zAJ4nwo	TheReceptionist	653	Entertainment	424	13021	4.34	1305	744	DjdA-5oKYF
 
 
 
-#### 用户表
+## 用户表
 
 | 字段     | 备注         | 字段类型 |
 | -------- | ------------ | -------- |
@@ -62,7 +60,20 @@ camelcars	26	674
 
 
 
-#### 分析
+```sql
+t1
+
+
+select categoryId,videoId,views
+from (
+select categoryId, videoId, views,row_number() over(partition by categoryId order by views) rank
+from guli_video_category) t1
+where rank <= 10;
+```
+
+
+
+## 分析
 
 - 视频表
   - 分隔都是\t
@@ -82,7 +93,7 @@ camelcars	26	674
 
 
 
-### ETL原始数据
+## ETL原始数据
 
 - 通过观察原始数据形式
   - 视频可以有多个所属分类，每个所属分类用&符号分割，分割的两边有空格字符
@@ -95,7 +106,7 @@ camelcars	26	674
 
 
 
-#### Mapper
+### Mapper
 
 ```java
 package com.stt.demo.hive.Ch02_ETL;
@@ -155,7 +166,7 @@ public class ETLMapper extends Mapper<LongWritable,Text,Text,NullWritable> {
 
 
 
-#### Driver
+### Driver
 
 - 实际生产中使用的写法
 
@@ -247,7 +258,7 @@ public class ETLDriver implements Tool {
 
 
 
-#### 测试
+### 测试
 
 - 在运行配置中配置路径
 
@@ -255,7 +266,7 @@ public class ETLDriver implements Tool {
 
 
 
-#### 执行ETL
+### 执行ETL
 
 - 上传数据
 
@@ -279,11 +290,22 @@ public class ETLDriver implements Tool {
 
 
 
-## 准备工作
+# 准备工作
 
 
 
-### 创建表
+## 创建数据库
+
+```sql
+hive (default)> create database guli;
+Time taken: 0.102 seconds
+hive (default)> use guli;
+Time taken: 0.015 seconds
+```
+
+
+
+## 创建表
 
 - 创建user表
 - 创建video表
@@ -350,18 +372,9 @@ fields terminated by "\t"
 stored as orc;
 ```
 
-- 创建数据库
-
-```sql
-hive (default)> create database guli;
-Time taken: 0.102 seconds
-hive (default)> use guli;
-Time taken: 0.015 seconds
-```
 
 
-
-### 导入ETL后的数据
+## 导入ETL后的数据
 
 ```sql
 hive (guli)> load data inpath '/guli/video_etl' into table guli_video_ori;
@@ -377,22 +390,23 @@ hive (guli)> load data inpath '/guli/user' into table guli_user_ori;
 
 
 
-### 向ORC表插入数据
+## 向ORC表插入数据
+
+- 执行mr进行转换
 
 ```sql
-insert overwrite table guli_user_orc 
-select * from guli_user_ori;
-insert overwrite table guli_video_orc 
-select * from guli_video_ori;
+insert overwrite table guli_user_orc select * from guli_user_ori;
+
+insert overwrite table guli_video_orc select * from guli_video_ori;
 ```
 
 
 
-## 业务分析
+# 业务实现
 
 
 
-### 统计视频观看数Top10
+## 统计视频观看数Top10
 
 ```sql
 select videoId,views 
@@ -403,7 +417,7 @@ limit 10;
 
 
 
-### 统计视频类别热度Top10
+## 统计视频类别热度Top10
 
 - 即统计每个类别有多少个视频，显示出包含视频最多的前10个类别
 
@@ -413,22 +427,35 @@ limit 10;
   - 如果要group by类别，需要先将类别进**列转行(展开)**，explode
   - 然后再进行count即可
 
-- 最后按照热度排序，显示前10条。
+- 最后按照热度排序，显示前10条
 
 ```sql
 select count(1) hot,category_info 
 from (
-select explode(category) category_info
-from guli_video_orc
+    select explode(category) category_info
+    from guli_video_orc
 ) t
 group by category_info
 order by hot desc 
 limit 10;
 ```
 
+- 使用侧切
+
+```sql
+select count(1) hot,category_info
+from guli_video_orc
+lateral view explode(category) tm as category_info
+group by category_info
+order by hot desc 
+limit 10;
+
+// 31.312s
+```
 
 
-### 统计视频观看数Top20所属类别以及每个类别包含Top20视频的个数
+
+## 统计视频观看数Top20所属类别以及每个类别包含Top20视频的个数
 
 - 先找到观看数最高的20个视频所属条目的所有信息，降序排列
 
@@ -464,7 +491,7 @@ order by num desc;
 
 
 
-### 统计视频观看数Top50所关联视频的所属类别排序(最难)
+## 统计视频观看数Top50所关联视频的所属类别排序(最难)
 
 - 查询得到观看数top50关联视频信息，t1
 
@@ -540,7 +567,7 @@ order by hot desc;
 
 
 
-### 考虑优化
+## 后续可使用优化后的表
 
 - 由于每次使用category，进行列转行操作
 
@@ -588,7 +615,15 @@ lateral view explode (category) tmp as categoryId;
 
 
 
-### 统计每个类别中的视频热度Top10，以Music为例
+
+
+
+
+```sql
+
+```
+
+## 统计每个类别中的视频热度Top10，以Music为例
 
 ```sql
 select categoryId, videoId , views
@@ -600,7 +635,7 @@ limit 10;
 
 
 
-### 统计每个类别中视频流量Top10，以Music为例
+## 统计每个类别中视频流量Top10，以Music为例
 
 ```sql
 select categoryId, videoId , ratings
@@ -612,7 +647,7 @@ limit 10;
 
 
 
-### 统计上传视频最多的用户Top10以及他们上传的观看次数在前20的视频
+## 统计上传视频最多的用户Top10以及他们上传的观看次数在前20的视频
 
 - 统计上传视频最多的用户Top10，t1
 
@@ -653,14 +688,15 @@ limit 20;
 
 
 
-### 统计每个类别视频观看数Top10
+## 统计每个类别视频观看数Top10
 
 - 使用开窗函数
 
 ```sql
 select categoryId, videoId , views
 from(
-    select categoryId, videoId , views,row_number() over(partition by categoryId order by     views desc) rank
+    select categoryId, videoId , views,
+    row_number() over(partition by categoryId order by views desc) rank
     from guli_video_category
 ) t
 where t.rank <=10;
