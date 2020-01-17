@@ -27,7 +27,7 @@ bin/kafka-manager
 
 
 
-![1569760160796](img/kafka/28.png)
+<img src="img/28.png" alt="1" style="zoom:50%;" /> 
 
 
 

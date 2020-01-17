@@ -27,4 +27,5 @@ mkdir /opt/module/kafka-offset-console/mobile-logs
 
 7.登录页面hadoop102:8086端口查看详情
 
-![1569760733108](img/kafka/29.png)
+<img src="img/29.png" style="zoom:50%;" /> 
+
