@@ -768,4 +768,5 @@ sqoop export --connect jdbc:mysql://192.168.137.10:3306/user_behavior --username
 
 ## Sqoop数据导出的时候一次执行多长时间
 
-- Sqoop任务5分钟-2个小时的都有。取决于数据量
+- Sqoop任务5分钟-2个小时的都有
+- 取决于数据量
