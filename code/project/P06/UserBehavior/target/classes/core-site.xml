@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+ 	<!--指定hdfs的访问地址-->
+	<property>
+		<name>fs.defaultFS</name>
+                <value>hdfs://hadoop102:9000</value>
+        </property>
+        <!--指定hdfs数据存放的位置，包括元数据和存储的数据-->
+        <property>
+                <name>hadoop.tmp.dir</name>
+                <value>/opt/modules/hadoop/data/tmp</value>
+        </property>  
+        <!--指定数据删除后，存放在垃圾箱的时间，用于数据误删进的恢复操作，分钟为单位-->         
+        <property>                
+                <name>fs.trash.interval</name>                
+                <value>1440</value>        
+        </property>
+</configuration>

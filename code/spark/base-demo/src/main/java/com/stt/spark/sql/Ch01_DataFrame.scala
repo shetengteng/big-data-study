@@ -14,8 +14,6 @@ object Ch01_DataFrame {
 
     val rdd: RDD[(Int, String, Int)] = sparkSession.sparkContext.makeRDD(Array((1,"zhangsan",22),(2,"lisi",23)))
 
-
-
     // 将rdd转换为DataFrame，执行列结构
     val df: DataFrame = rdd.toDF("id","name","age")
 
