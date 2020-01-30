@@ -86,7 +86,6 @@ object Req1CategoryTop10Application {
         val categorySumMap: mutable.HashMap[String, Long] = categoryCountAccumulator.value
 
         //4.2.2 将聚合的数据融合在一起（category, (sumClick, sumOrder, sumPay)）
-
         val statMap: Map[String, mutable.HashMap[String, Long]] = categorySumMap.groupBy {
             case (k, v) => {
                 k.split("_")(0)

@@ -10,8 +10,6 @@ import org.apache.spark.sql.{SparkSession, _}
 
 import scala.collection.mutable.ListBuffer
 
-
-
 object MockerOffline {
 
   val userNum = 100;
@@ -58,7 +56,6 @@ object MockerOffline {
     val productInfoDF = productInfoRdd.toDF()
     val cityInfoDF = cityInfoRdd.toDF()
 
-
     insertHive(sparkSession, "user_visit_action", userVisitActionDF)
     insertHive(sparkSession, "user_info", userInfoDF)
     insertHive(sparkSession, "product_info", productInfoDF)
@@ -76,10 +73,7 @@ object MockerOffline {
 
   }
 
-
   def mockUserInfo() = {
-
-
     val rows = new ListBuffer[UserInfo]()
 
     for (i <- 1 to userNum) {

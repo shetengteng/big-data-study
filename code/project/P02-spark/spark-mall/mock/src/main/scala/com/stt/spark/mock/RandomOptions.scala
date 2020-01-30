@@ -17,7 +17,7 @@ object RandomOptions {
      randomOptions
   }
 
-    def main(args: Array[String]): Unit = {
+  def main(args: Array[String]): Unit = {
     val randomName = RandomOptions(RanOpt("zhangchen",10),RanOpt("li4",30))
     for (i <- 1 to 40 ) {
       println(i+":"+randomName.getRandomOpt())
