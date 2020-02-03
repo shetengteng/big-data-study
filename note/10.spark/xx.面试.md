@@ -1,5 +1,3 @@
-# 面试题
-
 待完善
 
 
@@ -123,6 +121,10 @@ rdd.mapPartitions(items=>{
   - reduceByKey有预聚合
 
   - groupByKey没有预聚合
+
+  - reduceByKey传入value的操作
+
+  - groupByKey返回的是一个key和vlaue的集合组成的元组
 
     
 

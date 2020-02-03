@@ -267,13 +267,11 @@ updateStateByKey会一直返回之前的历史状态信息
 
 ## 什么情况下副本不在ISR中？
 
-0.9版本之后，follwer落后leader replica.log.time.max.ms 的时间后，即不在ISR中，默认为10S
+0.9版本之后，follwer落后leader `replica.log.time.max.ms`的时间后，即不在ISR中，默认为10S
 
  
 
 ## 如何保证某些消息在Kafka中可以全局有序的消费
-
- 
 
 为这部分消息设置key，所以相同的key会进入同一个分区
 

@@ -6,14 +6,14 @@
 
 - 入口
   - 首页分类
-  ![1574512241147](img/es/1.png)
+  ![](../img/es (1).png) 
   - 搜索栏
   
-  ![1574512305206](img/es/2.png)
+   ![](../img/es (2).png)
 
 - 列表展示
 
-![1574512326476](img/es/3.png)
+![](../img/es (3).png) 
 
 
 
@@ -332,11 +332,11 @@ searchResult = jestClient.execute(search);
 
 - 结果结构
 
-![1574518909887](img/es/4.png)
+![](../img/es (4).png) 
 
-![1574519043924](img/es/5.png)
+![](../img/es (5).png)  
 
-![1574519054786](img/es/6.png)
+![](../img/es (6).png) 
 
 ```java
 private SkuLsResult makeResultForSearch(SkuLsParams skuLsParams,SearchResult searchResult){
