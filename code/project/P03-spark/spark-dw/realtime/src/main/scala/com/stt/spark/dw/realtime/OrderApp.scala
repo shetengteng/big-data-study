@@ -4,7 +4,6 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 import com.alibaba.fastjson.JSON
-import com.stt.spark.dw.GmallConstant
 import com.stt.spark.dw.realtime.bean.OrderInfo
 import com.stt.spark.dw.realtime.util.{MyEsUtil, MyKafkaUtil}
 import org.apache.kafka.clients.consumer.ConsumerRecord
@@ -27,6 +26,7 @@ object OrderApp {
       val time: LocalDateTime =
         LocalDateTime.parse(orderInfo.createTime,
           DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+
       orderInfo.createDate = time.toLocalDate.toString
       orderInfo.createHour = time.getHour.toString
       orderInfo.createHourMinute = time.getMinute.toString

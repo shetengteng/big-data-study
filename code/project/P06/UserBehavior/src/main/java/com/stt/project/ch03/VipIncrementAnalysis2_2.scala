@@ -117,8 +117,7 @@ object VipIncrementAnalysis2_2 {
     // 定义偏移量
     var offsetRanges: Array[OffsetRange] = Array.empty[OffsetRange]
     // 使用transform 算子的原因是，不会对分区进行修改，此时rdd的分区和kafka的分区保持一致
-    msgDStream
-      .transform(rdd => {
+    msgDStream.transform(rdd => {
         offsetRanges = rdd.asInstanceOf[HasOffsetRanges].offsetRanges
         rdd
       })
@@ -130,20 +129,20 @@ object VipIncrementAnalysis2_2 {
       .filter(eventTimeLessThan2Days) // 只保留最近2天的状态，而不只保存1天的状态是考虑跨天的情况
       .foreachRDD(rdd => {
 
-      def offsetSortWith = (left: (String, Int, Long), right: (String, Int, Long)) => {
-        if (left._1 == right._1) left._2 > right._2 else left._1 > right._1
-      }
-
-      // 判断offset是有变化，没有变化就不执行
-      val offsetStr1: String = readOffsetFromDB().sortWith(offsetSortWith).toString
-      val offsetStr2: String = offsetRanges.map(r => (r.topic, r.partition, r.untilOffset))
-        .toList.sortWith(offsetSortWith).toString
-
-      if (!offsetStr1.equals(offsetStr2)) {
-
-        val buff = rdd.collect().map {
-          case ((dt: String, province: String), sum: Int) => (dt, province, sum)
+        def offsetSortWith = (left: (String, Int, Long), right: (String, Int, Long)) => {
+          if (left._1 == right._1) left._2 > right._2 else left._1 > right._1
         }
+
+        // 判断offset是否变化，没有变化就不执行
+        val offsetStr1: String = readOffsetFromDB().sortWith(offsetSortWith).toString
+        val offsetStr2: String = offsetRanges.map(r => (r.topic, r.partition, r.untilOffset))
+          .toList.sortWith(offsetSortWith).toString
+
+        if (!offsetStr1.equals(offsetStr2)) {
+          // 使用rdd的collect方式将executor的结果返回到driver端
+          val buff = rdd.collect().map {
+            case ((dt: String, province: String), sum: Int) => (dt, province, sum)
+          }
 
         // 开始事务
         DB.localTx {

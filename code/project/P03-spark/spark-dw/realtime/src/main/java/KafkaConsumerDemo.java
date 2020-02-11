@@ -1,4 +1,5 @@
 import com.stt.spark.dw.GmallConstant;
+import com.stt.spark.dw.realtime.GmallConstant;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 

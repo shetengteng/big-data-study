@@ -47,7 +47,7 @@ https://www.infoq.cn/article/sIhs_qY6HCpMQNblTI9M
 # 面试题四：checkpoint 的存储
 
 问题：Flink 的 checkpoint 存在哪里？
-解答：可以是内存，文件系统，或者 RocksDB。详见文档 9.4 节。
+解答：可以是内存，文件系统，或者 RocksDB。详见文档 9.4 节
 
 
 
@@ -89,7 +89,7 @@ Flink 中，状态始终与特定算子相关联。Flink 会以 checkpoint 的�
 问题：Flink 的 checkpoint 机制对比 spark 有什么不同和优势？
 解答：spark streaming 的 checkpoint 仅仅是针对 driver 的故障恢复做了数据
 和元数据的 checkpoint。而 flink 的 checkpoint 机制 要复杂了很多，它采用的是
-轻量级的分布式快照，实现了每个算子的快照，及流动中的数据的快照。参见文档
+轻量级的分布式快照，**实现了每个算子的快照，及流动中的数据的快照**。参见文档
 9.3 节及文章链接： https://cloud.tencent.com/developer/article/1189624
 
 

@@ -261,3 +261,119 @@ ISR (In-Sync Replica)集合表示的是目前“可用”( alive)且消息量与
 - ISR是leader和follower的集合，而且follower的数据与leader的数据相差不多
 - 当follower宕机等导致与leader数据相差过多超过阈值，则会剔除ISR
 - follower从异常中恢复，则会继续与leader进行同步，当数据差异小于阈值，则重新加入ISR中
+
+
+
+# Kafka相关总结
+
+![1570245231476](../img/project/01/19.png)
+
+- Zookeeper 没有生产者信息，只有消费者信息
+
+- Kafka压测
+
+  - Kafka官方自带压力测试脚本（kafka-consumer-perf-test.sh、kafka-producer-perf-test.sh）
+  - Kafka压测时，可以查看到哪个地方出现了瓶颈（CPU，内存，网络IO）
+  - 一般都是网络IO达到瓶颈
+  - 一般的生产速度
+    - 10M，20M
+  - 消费能力
+    - ...
+
+- Kafka的机器数量
+
+- Kafka机器数量=`2*（峰值生产速度*副本数/100）+1`
+
+- Kafka的日志保存时间
+
+- 7天
+
+- Kafka的硬盘大小
+
+- 每天的数据量*7天
+
+- Kafka监控
+
+  - 公司自己开发的监控器
+  - 开源的监控器：KafkaManager、KafkaMonitor
+
+- Kakfa分区数
+
+  - 影响消费的并发度
+  - ==分区数并不是越多越好，一般分区数不要超过集群机器数量==
+  - 分区数越多占用内存越大（ISR等），一个节点集中的分区也就越多，当它宕机的时候，对系统的影响也就越大。
+  - 分区数一般设置为：==3-10个==
+
+- 副本数设定
+
+  - 一般我们设置成2个或3个，很多企业设置为2个
+  - 影响磁盘IO
+
+- 多少个Topic
+
+  - 通常情况
+    - 多少个日志类型就多少个Topic
+    - 也有对日志类型进行合并的
+
+- ==Kafka丢不丢数据==
+
+  - 应答机制
+  - Ack=0，相当于异步发送，消息发送完毕即offset增加，继续生产
+  - Ack=1，leader收到leader replica 对一个消息的接受ack才增加offset，然后继续生产
+  - Ack=-1，leader收到所有replica 对一个消息的接受ack才增加offset，然后继续生产。
+
+- Kafka的ISR副本同步队列
+
+  - ISR（In-Sync Replicas），副本同步队列
+  - ISR中包括Leader和Follower
+  - 如果Leader进程挂掉，会在ISR队列中选择一个服务作为新的Leader
+  - 有replica.lag.max.messages（延迟条数）和replica.lag.time.max.ms（延迟时间）两个参数决定一台服务是否可以加入ISR副本队列
+  - 在0.10版本移除了replica.lag.max.messages参数，防止服务频繁的进去队列
+  - 任意一个维度超过阈值都会把Follower剔除出ISR，存入OSR（Outof-Sync Replicas）列表，新加入的Follower也会先存放在OSR中。
+
+- ==Kafka分区分配策略==
+
+  - 两种默认的分区分配策略
+
+    - Range
+
+      - 默认策略
+
+      - Range是对每个Topic而言的（即一个Topic一个Topic分），首先对同一个Topic里面的分区按照序号进行排序，并对消费者按照字母顺序进行排序。然后用Partitions分区的个数除以消费者线程的总数来决定每个消费者线程消费几个分区。如果除不尽，那么前面几个消费者线程将会多消费一个分区
+
+      - 如有10个分区，两个消费者（C1，C2），3个消费者线程，10 / 3 = 3而且除不尽。
+
+        C1-0 将消费 0, 1, 2, 3 分区
+
+        C2-0 将消费 4, 5, 6 分区
+
+        C2-1 将消费 7, 8, 9 分区
+
+    - RoundRobin
+
+      - 前提
+        - 同一个Consumer Group里面的所有消费者的num.streams（消费者消费线程数）必须相等
+        - 每个消费者订阅的主题必须相同
+      - 将所有主题分区组成TopicAndPartition列表，然后对TopicAndPartition列表按照hashCode进行排序，最后按照轮询的方式发给每一个消费线程
+
+- ==Kafka中数据量计算==
+
+  - 每天总数据量100g，每天产生1亿条日志， 10000万/24/60/60=1150条/每秒钟
+  - 平均每秒钟：1150条
+  - 低谷每秒钟：400条
+  - 高峰每秒钟：1150条*（2-20倍）=2300条-23000条
+  - 每条日志大小：0.5k-2k
+  - 每秒多少数据量：2.3M-20MB
+
+- Kafka挂掉
+
+  - Flume记录
+  - 日志有记录
+  - 短期没事
+
+- Kafka消息数据积压，Kafka消费能力不足怎么处理？ 
+
+  - 如果是Kafka消费能力不足，则可以考虑增加Topic的分区数，并且同时提升消费组的消费者数量，消费者数=分区数。（两者缺一不可）
+  - 如果是下游的数据处理不及时，提高每批次拉取的数量
+  - 批次拉取数据过少（拉取数据/处理时间<生产速度），使处理的数据小于生产的数据，也会造成数据积压
+

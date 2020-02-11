@@ -203,7 +203,7 @@ updateStateByKey会一直返回之前的历史状态信息
 
 3) 可靠的事务机制：
 
-基于receiver的方式，是使用Kafka的高阶API来在ZooKeeper中保存消费过的offset的。这是消费Kafka数据的传统方式。这种方式配合着WAL机制可以保证数据零丢失的高可靠性，但是却无法保证数据被处理一次且仅一次，可能会处理两次。因为Spark和ZooKeeper之间可能是不同步的。 基于direct的方式，使用kafka的简单api，Spark Streaming自己就负责追踪消费的offset，可以保证output操作和保存offset操作是同步的(两个操作放入到一个事务中)，因此可以保证数据是消费一次且仅消费一次。
+基于receiver的方式，是使用Kafka的高阶API来在ZooKeeper中保存消费过的offset的。这是消费Kafka数据的传统方式。这种方式配合着WAL机制可以保证数据零丢失的高可靠性，但是却无法保证数据被处理一次且仅一次，可能会处理两次。因为Spark和ZooKeeper之间可能是不同步的。 基于direct的方式，使用kafka的简单api，Spark Streaming自己就负责追踪消费的offset，可以保证output操作和保存offset操作是同步的(两个操作放入到一个事务中)，因此可以保证数据是消费一次且仅消费一次
 
 
 

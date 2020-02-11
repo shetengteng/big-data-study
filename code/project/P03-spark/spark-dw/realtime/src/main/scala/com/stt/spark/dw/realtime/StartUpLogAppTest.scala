@@ -1,6 +1,5 @@
 package com.stt.spark.dw.realtime
 
-import com.stt.spark.dw.GmallConstant
 import com.stt.spark.dw.realtime.util.MyKafkaUtil
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.spark.SparkConf

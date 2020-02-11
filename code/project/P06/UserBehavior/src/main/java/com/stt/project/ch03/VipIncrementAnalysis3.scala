@@ -137,7 +137,7 @@ object VipIncrementAnalysis3 {
       .filter(completeOrderData)
       .map(conversionToDateCountryOne) // 数据转换，返回((2019-04-03,北京),1)格式的数据
       .mapWithState(StateSpec.function(mappingFunc).timeout(Durations.seconds(3))) // 超时表示上次更新到现在的时间
-      //      .filter(eventTimeLessThan2Days) // 只保留最近2天的状态，而不只保存1天的状态是考虑跨天的情况
+      // .filter(eventTimeLessThan2Days) // 只保留最近2天的状态，而不只保存1天的状态是考虑跨天的情况
       .stateSnapshots() // 去除保留2天的功能，增加快照算子
       .foreachRDD(rdd => {
 

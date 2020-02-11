@@ -4,7 +4,6 @@ import java.time.format.DateTimeFormatter
 import java.time.{Instant, LocalDateTime, ZoneId}
 
 import com.alibaba.fastjson.JSON
-import com.stt.spark.dw.GmallConstant
 import com.stt.spark.dw.realtime.bean.StartUpLog
 import com.stt.spark.dw.realtime.util.{MyEsUtil, MyKafkaUtil, RedisUtil}
 import org.apache.kafka.clients.consumer.ConsumerRecord
